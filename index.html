@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAR - Simulasi Pemantulan dan Pembiasan Cahaya</title>
+    <title>WebAR - Pemantulan & Pembiasan Cahaya</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -15,7 +14,7 @@
     <!-- Header -->
     <header class="bg-indigo-700 text-white shadow-md py-3 px-4 flex justify-between items-center">
         <h1 class="text-sm md:text-base font-bold flex items-center gap-1.5">
-            💡 Simulasi Pemantulan & Pembiasan + Busur
+            📐 Simulasi Pemantulan & Pembiasan Cahaya
         </h1>
         <span class="text-[10px] bg-indigo-800 px-2.5 py-1 rounded-full border border-indigo-600">Fisika Digital</span>
     </header>
@@ -23,51 +22,49 @@
     <!-- Main Container -->
     <div class="flex-1 flex flex-col p-3 gap-3 max-w-2xl mx-auto w-full">
         
-        <!-- Area Simulasi Canvas (Di atas biar langsung kelihatan) -->
-        <div class="bg-gray-900 rounded-xl overflow-hidden relative shadow-md flex flex-col items-center justify-center h-64 w-full">
+        <!-- Area Simulasi Canvas -->
+        <div class="bg-gray-900 rounded-xl overflow-hidden relative shadow-md flex flex-col items-center justify-center h-56 w-full">
             <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1.5 z-10">
-                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                 Visualisasi Busur & Sinar
             </div>
             
             <canvas id="simCanvas" class="w-full h-full"></canvas>
             
-            <div id="mediumLabel" class="absolute bottom-2 left-2 text-[10px] text-white/90 bg-black/60 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10 z-10">
-                Medium 1: Udara | Medium 2: Air
+            <div class="absolute bottom-2 left-2 text-[10px] text-white/90 bg-black/60 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10 z-10">
+                Med 1 (Udara) & Med 2 (Air/Kaca)
             </div>
         </div>
 
-        <!-- Panel LKPD & Kontrol -->
+        <!-- Panel LKPD Interaktif (Bisa Diketik Langsung) -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 space-y-3 text-sm">
             <div class="bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-100 flex justify-between items-center">
                 <h2 class="font-semibold text-indigo-950 text-xs md:text-sm">📝 Lembar Kerja (LKPD) Berbasis PBL</h2>
-                <span class="text-[10px] text-indigo-700 font-medium">Model: Problem-Based Learning</span>
+                <span class="text-[10px] text-indigo-700 font-medium">Model Problem-Based Learning</span>
             </div>
 
-            <!-- Panduan & Pertanyaan LKPD -->
-            <div class="p-3 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg space-y-2 text-xs">
+            <!-- Panduan LKPD -->
+            <div class="p-3 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg space-y-1 text-xs">
                 <p class="font-semibold text-amber-900">Fase 1: Orientasi Masalah</p>
                 <p class="text-amber-800">
                     Perhatikan busur derajat transparan dan arah sinar pada simulasi di atas. Mengapa dasar kolam terlihat lebih dangkal dari kenyataannya? Coba ubah sudut datang (θ₁) dan mediumnya, lalu amati perubahan besar sudut bias (θ₂) dan sudut pantulnya!
                 </p>
             </div>
 
-            <!-- Pilihan Medium 1 & 2 -->
-            <div class="grid grid-cols-2 gap-2">
+            <!-- Pilihan Medium -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                     <label class="block font-medium text-gray-700 text-xs mb-1">1. Medium Pertama:</label>
-                    <select id="medium1Select" class="w-full border border-gray-300 rounded-lg p-1.5 bg-gray-50 text-xs text-gray-800 focus:ring-2 focus:ring-indigo-500">
+                    <select id="med1Select" class="w-full border border-gray-300 rounded-lg p-1.5 bg-gray-50 text-xs text-gray-800">
                         <option value="1.00">Udara (n = 1.00)</option>
-                        <option value="1.33">Air (n = 1.33)</option>
-                        <option value="1.50">Kaca (n = 1.50)</option>
                     </select>
                 </div>
                 <div>
                     <label class="block font-medium text-gray-700 text-xs mb-1">2. Medium Kedua:</label>
-                    <select id="medium2Select" class="w-full border border-gray-300 rounded-lg p-1.5 bg-gray-50 text-xs text-gray-800 focus:ring-2 focus:ring-indigo-500">
-                        <option value="1.33" selected>Air (n = 1.33)</option>
+                    <select id="med2Select" class="w-full border border-gray-300 rounded-lg p-1.5 bg-gray-50 text-xs text-gray-800">
+                        <option value="1.33">Air (n = 1.33)</option>
                         <option value="1.50">Kaca (n = 1.50)</option>
-                        <option value="1.00">Udara (n = 1.00)</option>
+                        <option value="2.42">Intan (n = 2.42)</option>
                     </select>
                 </div>
             </div>
@@ -76,44 +73,49 @@
             <div>
                 <div class="flex justify-between items-center mb-1 text-xs">
                     <label class="font-medium text-gray-700">3. Sudut Datang Sinar (θ₁):</label>
-                    <span id="angleValue" class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">30°</span>
+                    <span id="angleVal" class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">30°</span>
                 </div>
-                <input type="range" id="angleRange" min="0" max="85" value="30" class="w-full accent-indigo-600 cursor-pointer">
+                <input type="range" id="angleRange" min="0" max="80" value="30" class="w-full accent-indigo-600 cursor-pointer">
             </div>
 
-            <!-- Hasil Pengamatan -->
+            <!-- Hasil Pengamatan & Kolom Isian LKPD -->
             <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
                 <h3 class="font-semibold text-gray-900 text-xs border-b pb-1">📊 Hasil Pengamatan & Analisis:</h3>
                 <div class="grid grid-cols-2 gap-2 text-center">
                     <div class="bg-white p-2 rounded-lg border border-gray-200">
                         <span class="block text-[10px] text-gray-500">Sudut Pantul (θᵣ)</span>
-                        <span id="resReflect" class="text-base font-bold text-indigo-600">30.0°</span>
+                        <span id="resReflect" class="text-xs font-bold text-indigo-600">30.0°</span>
                     </div>
                     <div class="bg-white p-2 rounded-lg border border-gray-200">
                         <span class="block text-[10px] text-gray-500">Sudut Bias (θ₂)</span>
-                        <span id="resRefract" class="text-base font-bold text-indigo-600">22.1°</span>
+                        <span id="resRefract" class="text-xs font-bold text-indigo-600">22.1°</span>
                     </div>
                 </div>
-                <div class="text-[11px] text-gray-600 bg-indigo-50/50 p-2 rounded border border-indigo-100">
-                    <span class="font-semibold text-indigo-900">Hukum Snellius:</span> 
-                    <span>n₁ · sin(θ₁) = n₂ · sin(θ₂)</span>
+
+                <!-- KOLOM INPUT LKPD (Bisa diketik langsung oleh siswa) -->
+                <div class="pt-2">
+                    <label class="block text-xs font-medium text-gray-700 mb-1">✍️ Catat Hipotesis / Kesimpulan Siswa di Sini:</label>
+                    <textarea placeholder="Ketik hasil analisis atau jawaban pertanyaan PBL di sini..." class="w-full border border-gray-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-indigo-500 h-16 resize-none"></textarea>
+                </div>
+
+                <div class="text-[11px] text-gray-600 bg-indigo-50/50 p-2 rounded border border-indigo-100 flex justify-between items-center">
+                    <span class="font-semibold text-indigo-900">Hukum Snellius: n₁ · sin(θ₁) = n₂ · sin(θ₂)</span>
+                    <span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded">PBL Task</span>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Script Kalkulasi & Canvas -->
+    <!-- Script Simulasi -->
     <script>
         const canvas = document.getElementById('simCanvas');
         const ctx = canvas.getContext('2d');
         const angleRange = document.getElementById('angleRange');
-        const angleValue = document.getElementById('angleValue');
-        const medium1Select = document.getElementById('medium1Select');
-        const medium2Select = document.getElementById('medium2Select');
+        const angleVal = document.getElementById('angleVal');
+        const med2Select = document.getElementById('med2Select');
         const resReflect = document.getElementById('resReflect');
         const resRefract = document.getElementById('resRefract');
-        const mediumLabel = document.getElementById('mediumLabel');
 
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
@@ -126,147 +128,83 @@
         function drawSimulation() {
             const width = canvas.width;
             const height = canvas.height;
-            const centerX = width / 2;
-            const centerY = height / 2;
-
             ctx.clearRect(0, 0, width, height);
 
-            const n1 = parseFloat(medium1Select.value);
-            const n2 = parseFloat(medium2Select.value);
             const theta1Deg = parseFloat(angleRange.value);
-            
-            angleValue.innerText = theta1Deg + '°';
+            const theta1Rad = theta1Deg * (Math.PI / 180);
+            const n1 = 1.00;
+            const n2 = parseFloat(med2Select.value);
+
+            angleVal.innerText = theta1Deg + '°';
             resReflect.innerText = theta1Deg.toFixed(1) + '°';
 
-            const theta1Rad = (theta1Deg * Math.PI) / 180;
+            // Hukum Snellius: n1 * sin(theta1) = n2 * sin(theta2)
             let sinTheta2 = (n1 * Math.sin(theta1Rad)) / n2;
-            
-            let theta2Deg = 0;
-            let isTotalInternalReflection = false;
+            if (sinTheta2 > 1) sinTheta2 = 1;
+            let theta2Rad = Math.asin(sinTheta2);
+            let theta2Deg = theta2Rad * (180 / Math.PI);
+            resRefract.innerText = theta2Deg.toFixed(1) + '°';
 
-            if (sinTheta2 > 1) {
-                isTotalInternalReflection = true;
-                theta2Deg = theta1Deg;
-                resRefract.innerText = "Refleksi Total (TIR)";
-            } else {
-                const theta2Rad = Math.asin(sinTheta2);
-                theta2Deg = (theta2Rad * 180) / Math.PI;
-                resRefract.innerText = theta2Deg.toFixed(1) + '°';
-            }
-
-            const m1Name = medium1Select.options[medium1Select.selectedIndex].text.split(' ')[0];
-            const m2Name = medium2Select.options[medium2Select.selectedIndex].text.split(' ')[0];
-            mediumLabel.innerText = `Med 1: ${m1Name} | Med 2: ${m2Name}`;
-
-            // Background Medium 1 & 2
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(0, 0, width, centerY);
-
+            // Background Medium
             ctx.fillStyle = '#0f172a';
-            ctx.fillRect(0, centerY, width, centerY);
+            ctx.fillRect(0, 0, width, height / 2);
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(0, height / 2, width, height / 2);
 
             // Garis Batas Medium
-            ctx.strokeStyle = '#38bdf8';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(0, centerY);
-            ctx.lineTo(width, centerY);
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
             ctx.stroke();
 
-            // Garis Normal (Putus-putus vertikal)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            // Garis Normal (Putus-putus)
             ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
             ctx.beginPath();
-            ctx.moveTo(centerX, 10);
-            ctx.lineTo(centerX, height - 10);
+            ctx.moveTo(width / 2, 10);
+            ctx.lineTo(width / 2, height - 10);
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Busur Derajat Digital Setengah Lingkaran
-            const protractorRadius = Math.min(width, height) * 0.42;
-            
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, protractorRadius, Math.PI, 2 * Math.PI);
-            ctx.stroke();
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const rayLen = Math.min(width, height) * 0.4;
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.font = '9px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            for (let deg = 0; deg <= 180; deg += 30) {
-                const rad = ((deg - 90) * Math.PI) / 180;
-                const innerR = protractorRadius - 5;
-                
-                const x1 = centerX + protractorRadius * Math.cos(rad);
-                const y1 = centerY + protractorRadius * Math.sin(rad);
-                const x2 = centerX + innerR * Math.cos(rad);
-                const y2 = centerY + innerR * Math.sin(rad);
-
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
-
-                if (deg !== 90) {
-                    const labelR = protractorRadius - 15;
-                    const lx = centerX + labelR * Math.cos(rad);
-                    const ly = centerY + labelR * Math.sin(rad);
-                    const angleLabelVal = Math.abs(deg - 90);
-                    ctx.fillText(angleLabelVal + '°', lx, ly);
-                }
-            }
-
-            // Panjang Sinar Mengikuti Ukuran Busur
-            const rayLen = protractorRadius - 5;
-
-            // 1. Sinar Datang (Datang dari kiri atas ke titik pusat)
-            const startX = centerX - rayLen * Math.sin(theta1Rad);
-            const startY = centerY - rayLen * Math.cos(theta1Rad);
-            ctx.strokeStyle = '#fbbf24'; // Kuning emas
+            // Sinar Datang (Kuning)
+            let xIncoming = centerX - rayLen * Math.sin(theta1Rad);
+            let yIncoming = centerY - rayLen * Math.cos(theta1Rad);
+            ctx.strokeStyle = '#facc15';
             ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.moveTo(startX, startY);
+            ctx.moveTo(xIncoming, yIncoming);
             ctx.lineTo(centerX, centerY);
             ctx.stroke();
 
-            // 2. Sinar Pantul (Memantul ke kanan atas)
-            const reflectX = centerX + rayLen * Math.sin(theta1Rad);
-            const reflectY = centerY - rayLen * Math.cos(theta1Rad);
-            ctx.strokeStyle = '#f43f5e'; // Merah
-            ctx.lineWidth = 2.5;
+            // Sinar Pantul (Biru)
+            let xReflect = centerX + rayLen * Math.sin(theta1Rad);
+            let yReflect = centerY - rayLen * Math.cos(theta1Rad);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(centerX, centerY);
-            ctx.lineTo(reflectX, reflectY);
+            ctx.lineTo(xReflect, yReflect);
             ctx.stroke();
 
-            // 3. Sinar Bias (Membias ke kanan bawah)
-            if (!isTotalInternalReflection) {
-                const refractRad = (theta2Deg * Math.PI) / 180;
-                const refractX = centerX + rayLen * Math.sin(refractRad);
-                const refractY = centerY + rayLen * Math.cos(refractRad);
-                ctx.strokeStyle = '#38bdf8'; // Biru terang
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.moveTo(centerX, centerY);
-                ctx.lineTo(refractX, refractY);
-                ctx.stroke();
-            }
-
-            // Titik Pusat Pertemuan Sinar (O)
-            ctx.fillStyle = '#ffffff';
+            // Sinar Bias (Merah)
+            let xRefract = centerX + rayLen * Math.sin(theta2Rad);
+            let yRefract = centerY + rayLen * Math.cos(theta2Rad);
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 3;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 3.5, 0, 2 * Math.PI);
-            ctx.fill();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(xRefract, yRefract);
+            ctx.stroke();
         }
 
         angleRange.addEventListener('input', drawSimulation);
-        medium1Select.addEventListener('change', drawSimulation);
-        medium2Select.addEventListener('change', drawSimulation);
-
-        // Panggil pertama kali
+        med2Select.addEventListener('change', drawSimulation);
         resizeCanvas();
     </script>
 </body>
